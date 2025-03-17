@@ -30,8 +30,9 @@ export const useGeminiAI = () => {
     setResponse(null);
     
     try {
+      // Updated to use the correct API endpoint for Gemini Pro
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`,
         {
           method: 'POST',
           headers: {
@@ -76,6 +77,7 @@ export const useGeminiAI = () => {
       );
       
       if (!response.ok) {
+        console.error(`HTTP error! Status: ${response.status}`, await response.text());
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       
