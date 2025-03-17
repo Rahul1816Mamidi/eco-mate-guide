@@ -13,16 +13,17 @@ const GlassCard: React.FC<GlassCardProps> = ({
   className,
   variant = 'default'
 }) => {
+  const baseStyles = "bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-gray-100 dark:border-gray-700 rounded-lg shadow-lg";
+  
   const variants = {
-    default: 'glass',
-    light: 'glass-light',
-    dark: 'glass-dark'
+    default: 'glass ' + baseStyles,
+    light: 'glass-light ' + baseStyles + ' bg-white/80 dark:bg-gray-800/50',
+    dark: 'glass-dark ' + baseStyles + ' bg-gray-900/80 dark:bg-gray-900/80 text-white'
   };
 
   return (
     <div
       className={cn(
-        'rounded-lg shadow-lg',
         variants[variant],
         className
       )}
