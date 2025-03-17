@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { plasticUsageExamples, plasticAlternatives } from '@/lib/data';
 import GlassCard from '@/components/ui/GlassCard';
-import Badge from '@/components/ui/Badge';
+import { Badge } from '@/components/ui/badge';
 import { Trash2, PlusCircle, MinusCircle, Info, Sparkles } from 'lucide-react';
 
 interface PlasticItem {
