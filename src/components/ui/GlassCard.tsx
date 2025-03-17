@@ -6,12 +6,14 @@ interface GlassCardProps {
   children: React.ReactNode;
   className?: string;
   variant?: 'default' | 'light' | 'dark';
+  style?: React.CSSProperties;
 }
 
 const GlassCard: React.FC<GlassCardProps> = ({
   children,
   className,
-  variant = 'default'
+  variant = 'default',
+  style
 }) => {
   const baseStyles = "bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-gray-100 dark:border-gray-700 rounded-lg shadow-lg";
   
@@ -27,6 +29,7 @@ const GlassCard: React.FC<GlassCardProps> = ({
         variants[variant],
         className
       )}
+      style={style}
     >
       {children}
     </div>
