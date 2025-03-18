@@ -123,10 +123,22 @@ const CleanEnergy = () => {
               </button>
               
               {response && (
-                <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <h4 className="font-semibold mb-2">Energy Efficiency Recommendations:</h4>
+                <div className="mt-4 p-5 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <h4 className="font-bold text-lg mb-4 text-primary">Energy Efficiency Recommendations</h4>
                   <div className="prose dark:prose-invert max-w-none">
-                    {response}
+                    <div 
+                      className="space-y-4" 
+                      dangerouslySetInnerHTML={{
+                        __html: response
+                          .replace(/\*\*([^*]+)\*\*/g, '<span class="font-semibold text-primary">$1</span>')
+                          .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+                          .replace(/### ([^\n]+)/g, '<h3 class="text-lg font-bold mt-4 mb-2">$1</h3>')
+                          .replace(/## ([^\n]+)/g, '<h2 class="text-xl font-bold mt-5 mb-3">$1</h2>')
+                          .replace(/\n\n/g, '<br/><br/>')
+                          .replace(/\n/g, '<br/>')
+                          .replace(/• ([^\n]+)/g, '<div class="flex ml-2 mb-1"><span class="text-primary mr-2">•</span><span>$1</span></div>')
+                      }} 
+                    />
                   </div>
                 </div>
               )}

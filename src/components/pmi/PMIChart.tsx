@@ -1,15 +1,5 @@
 
 import React from 'react';
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  ReferenceLine
-} from 'recharts';
 import { pmiHistoricalData } from '@/lib/data';
 import GlassCard from '@/components/ui/GlassCard';
 
@@ -53,47 +43,6 @@ const PMIChart: React.FC = () => {
               {pmiHistoricalData[0]?.pmi || 'N/A'}
             </div>
           </div>
-        </div>
-
-        <div className="h-80">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={pmiHistoricalData}
-              margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e0e0e0" />
-              <XAxis 
-                dataKey="month" 
-                axisLine={false} 
-                tickLine={false}
-                tick={{ fontSize: 12 }}
-              />
-              <YAxis 
-                domain={[0, 100]}
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 12 }}
-              />
-              <Tooltip 
-                contentStyle={{ 
-                  borderRadius: '8px',
-                  border: 'none',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                  backgroundColor: 'white' 
-                }}
-                labelStyle={{ fontWeight: 'bold' }}
-              />
-              <ReferenceLine y={averagePMI} stroke="#FF8042" strokeDasharray="3 3" label="Average" />
-              <Line
-                type="monotone"
-                dataKey="pmi"
-                stroke="hsl(var(--primary))"
-                strokeWidth={3}
-                dot={{ r: 4, strokeWidth: 2 }}
-                activeDot={{ r: 6, strokeWidth: 0 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
         </div>
         
         <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm">

@@ -33,9 +33,10 @@ export const useGeminiAI = () => {
     try {
       // Using Gemini 1.5 Flash model
       const enhancedPrompt = `
-        Please provide a concise, well-structured response to the following query.
-        Format your answer with clear headings and bullet points where appropriate.
-        Keep your response focused, informative, and under 200 words.
+        Please provide a well-structured response to the following query.
+        Format your answer with clear sections using markdown (##, ###).
+        Use bullet points (•) for lists and bold (**text**) for emphasis.
+        Keep your response concise, organized, and focus on the most important information.
         
         Query: ${prompt}
       `;
@@ -53,7 +54,7 @@ export const useGeminiAI = () => {
             },
           ],
           generationConfig: {
-            temperature: 0.4,
+            temperature: 0.3,
             topK: 32,
             topP: 0.8,
             maxOutputTokens: 800,
@@ -102,8 +103,18 @@ export const useGeminiAI = () => {
         // Remove any extra instructions that might have been included
         result = result.replace(/^(As an AI assistant|I'll provide|Here's a concise|Here is a|Following your instructions).*?\n/i, '');
         
+        // Remove redundant title if present
+        result = result.replace(/^#+\s*Energy Efficiency Recommendations:?\s*\n+/i, '');
+        result = result.replace(/^#+\s*Simple Ways to Make Your Home More Energy Efficient:?\s*\n+/i, '');
+        
         // Format markdown headers properly
         result = result.replace(/^(\w.+):$/gm, '**$1:**');
+        
+        // Fix bullet points
+        result = result.replace(/^[*-]\s+/gm, '• ');
+        
+        // Ensure there's spacing between sections
+        result = result.replace(/(\n#+\s+)/g, '\n\n$1');
         
         setResponse(result);
       } else {
