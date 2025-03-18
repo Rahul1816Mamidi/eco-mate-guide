@@ -2,7 +2,7 @@
 import React from 'react';
 import Header from '@/components/layout/Header';
 import PMICalculator from '@/components/pmi/PMICalculator';
-import PMIChart from '@/components/pmi/PMIChart';
+import EcoTipOfTheDay from '@/components/pmi/EcoTipOfTheDay';
 import Footer from '@/components/layout/Footer';
 
 const Index = () => {
@@ -22,7 +22,7 @@ const Index = () => {
           </div>
           
           <PMICalculator />
-          <PMIChart />
+          <EcoTipOfTheDay />
         </div>
       </main>
       

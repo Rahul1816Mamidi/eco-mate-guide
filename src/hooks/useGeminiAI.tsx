@@ -33,10 +33,19 @@ export const useGeminiAI = () => {
     try {
       // Using Gemini 1.5 Flash model
       const enhancedPrompt = `
-        Please provide a well-structured response to the following query.
-        Format your answer with clear sections using markdown (##, ###).
-        Use bullet points (•) for lists and bold (**text**) for emphasis.
-        Keep your response concise, organized, and focus on the most important information.
+        You are providing concise and clear information to users on sustainable living topics.
+        
+        Important formatting guidelines:
+        - Use a clean, structured format with clear sections when appropriate.
+        - Use headings (## for sections, ### for subsections) when it improves readability.
+        - Use bullet points (• ) for lists, NOT dashes or asterisks.
+        - Use bold (**text**) for emphasis on important terms.
+        - Avoid excessive formatting - be judicious.
+        - Be direct and practical with actionable advice.
+        - Keep your response under 200 words total, focusing on the most important points.
+        - DO NOT include titles like "Here's my response" or "Sustainable tips" at the beginning.
+        - DO NOT use placeholder terms like "here is" or "I'll provide".
+        - Just start with the content directly.
         
         Query: ${prompt}
       `;
@@ -54,9 +63,9 @@ export const useGeminiAI = () => {
             },
           ],
           generationConfig: {
-            temperature: 0.3,
+            temperature: 0.2,
             topK: 32,
-            topP: 0.8,
+            topP: 0.95,
             maxOutputTokens: 800,
           },
           safetySettings: [
@@ -106,15 +115,23 @@ export const useGeminiAI = () => {
         // Remove redundant title if present
         result = result.replace(/^#+\s*Energy Efficiency Recommendations:?\s*\n+/i, '');
         result = result.replace(/^#+\s*Simple Ways to Make Your Home More Energy Efficient:?\s*\n+/i, '');
+        result = result.replace(/^#+\s*Eco Tip(s)? (of the Day|for Today):?\s*\n+/i, '');
         
         // Format markdown headers properly
         result = result.replace(/^(\w.+):$/gm, '**$1:**');
         
         // Fix bullet points
-        result = result.replace(/^[*-]\s+/gm, '• ');
+        result = result.replace(/^[-*]\s+/gm, '• ');
         
         // Ensure there's spacing between sections
         result = result.replace(/(\n#+\s+)/g, '\n\n$1');
+        
+        // Remove any "Query:" text that might be included
+        result = result.replace(/Query:.*$/gm, '');
+        
+        // Clean up extra whitespace
+        result = result.replace(/\n{3,}/g, '\n\n');
+        result = result.trim();
         
         setResponse(result);
       } else {

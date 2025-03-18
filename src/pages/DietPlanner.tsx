@@ -128,10 +128,24 @@ const DietPlanner = () => {
               )}
               
               {response && (
-                <div className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <h4 className="font-semibold mb-2">AI-Powered Recommendations:</h4>
-                  <div className="prose dark:prose-invert max-w-none text-sm">
-                    {response}
+                <div className="mt-6 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-950">
+                  <div className="bg-green-50 dark:bg-green-900/20 p-4 border-b border-gray-200 dark:border-gray-800">
+                    <h4 className="font-bold text-lg text-green-600 dark:text-green-400">Sustainable Diet Recommendations</h4>
+                  </div>
+                  <div className="p-5">
+                    <div 
+                      className="prose dark:prose-invert prose-headings:text-green-600 dark:prose-headings:text-green-400 prose-headings:font-semibold max-w-none"
+                      dangerouslySetInnerHTML={{
+                        __html: response
+                          .replace(/\*\*([^*]+)\*\*/g, '<span class="font-semibold text-green-600 dark:text-green-400">$1</span>')
+                          .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+                          .replace(/### ([^\n]+)/g, '<h3 class="text-lg font-bold mt-4 mb-2 text-green-600 dark:text-green-400">$1</h3>')
+                          .replace(/## ([^\n]+)/g, '<h2 class="text-xl font-bold mt-5 mb-3 text-green-600 dark:text-green-400">$1</h2>')
+                          .replace(/\n\n/g, '</p><p>')
+                          .replace(/\n/g, '<br/>')
+                          .replace(/• ([^\n]+)/g, '<div class="flex items-start gap-2 mb-2"><div class="text-green-500 dark:text-green-400 mt-1">•</div><div>$1</div></div>')
+                      }} 
+                    />
                   </div>
                 </div>
               )}
@@ -188,3 +202,4 @@ const DietPlanner = () => {
 };
 
 export default DietPlanner;
+
