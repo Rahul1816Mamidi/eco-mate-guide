@@ -8,21 +8,10 @@ import {
   CartesianGrid, 
   Tooltip, 
   ResponsiveContainer,
-  AreaChart,
-  Area,
-  Legend,
-  ReferenceLine,
-  BarChart,
-  Bar
+  ReferenceLine
 } from 'recharts';
 import { pmiHistoricalData } from '@/lib/data';
 import GlassCard from '@/components/ui/GlassCard';
-import { 
-  ChartContainer, 
-  ChartTooltip, 
-  ChartTooltipContent 
-} from '@/components/ui/chart';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const PMIChart: React.FC = () => {
   const currentMonthData = pmiHistoricalData[pmiHistoricalData.length - 1];
@@ -33,12 +22,6 @@ const PMIChart: React.FC = () => {
 
   const averagePMI = pmiHistoricalData.reduce((sum, item) => sum + item.pmi, 0) / pmiHistoricalData.length;
   
-  // Generate the dataset for reduction goals
-  const reductionGoalData = pmiHistoricalData.map(item => ({
-    ...item,
-    goal: Math.max(0, pmiHistoricalData[0].pmi * (1 - 0.1 * pmiHistoricalData.findIndex(d => d.month === item.month) / 12))
-  }));
-
   return (
     <div className="max-w-3xl mx-auto mb-16">
       <div className="mb-6">
@@ -72,113 +55,48 @@ const PMIChart: React.FC = () => {
           </div>
         </div>
 
-        <Tabs defaultValue="line" className="mb-4">
-          <TabsList>
-            <TabsTrigger value="line">Trend Line</TabsTrigger>
-            <TabsTrigger value="area">Area Chart</TabsTrigger>
-            <TabsTrigger value="progress">Progress vs Goal</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="line" className="mt-4">
-            <div className="h-64 md:h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={pmiHistoricalData}
-                  margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e0e0e0" />
-                  <XAxis 
-                    dataKey="month" 
-                    axisLine={false} 
-                    tickLine={false}
-                    tick={{ fontSize: 12 }}
-                  />
-                  <YAxis 
-                    domain={[0, 100]}
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fontSize: 12 }}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      borderRadius: '8px',
-                      border: 'none',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                      backgroundColor: 'white' 
-                    }}
-                    labelStyle={{ fontWeight: 'bold' }}
-                  />
-                  <ReferenceLine y={averagePMI} stroke="#FF8042" strokeDasharray="3 3" />
-                  <Line
-                    type="monotone"
-                    dataKey="pmi"
-                    stroke="hsl(var(--primary))"
-                    strokeWidth={3}
-                    dot={{ r: 4, strokeWidth: 2 }}
-                    activeDot={{ r: 6, strokeWidth: 0 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="area" className="mt-4">
-            <div className="h-64 md:h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart
-                  data={pmiHistoricalData}
-                  margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis domain={[0, 100]} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      borderRadius: '8px',
-                      border: 'none',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                      backgroundColor: 'white' 
-                    }}
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="pmi" 
-                    stroke="hsl(var(--primary))" 
-                    fill="hsl(var(--primary)/0.2)" 
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="progress" className="mt-4">
-            <div className="h-64 md:h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={reductionGoalData}
-                  margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis domain={[0, 100]} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      borderRadius: '8px',
-                      border: 'none',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                      backgroundColor: 'white' 
-                    }}
-                  />
-                  <Legend />
-                  <Bar dataKey="pmi" name="Your PMI" fill="hsl(var(--primary))" />
-                  <Bar dataKey="goal" name="Target Goal" fill="#82ca9d" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </TabsContent>
-        </Tabs>
+        <div className="h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={pmiHistoricalData}
+              margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e0e0e0" />
+              <XAxis 
+                dataKey="month" 
+                axisLine={false} 
+                tickLine={false}
+                tick={{ fontSize: 12 }}
+              />
+              <YAxis 
+                domain={[0, 100]}
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12 }}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  borderRadius: '8px',
+                  border: 'none',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  backgroundColor: 'white' 
+                }}
+                labelStyle={{ fontWeight: 'bold' }}
+              />
+              <ReferenceLine y={averagePMI} stroke="#FF8042" strokeDasharray="3 3" label="Average" />
+              <Line
+                type="monotone"
+                dataKey="pmi"
+                stroke="hsl(var(--primary))"
+                strokeWidth={3}
+                dot={{ r: 4, strokeWidth: 2 }}
+                activeDot={{ r: 6, strokeWidth: 0 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
         
-        <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm">
+        <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm">
           <p><span className="font-medium">Analysis:</span> Your PMI score has {
             improvement > 0 
               ? `improved by ${improvement.toFixed(1)}% compared to last month.` 

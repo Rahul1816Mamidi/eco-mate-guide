@@ -31,7 +31,15 @@ export const useGeminiAI = () => {
     setResponse(null);
     
     try {
-      // Updated to use Gemini 1.5 Flash model
+      // Using Gemini 1.5 Flash model
+      const enhancedPrompt = `
+        Please provide a concise, well-structured response to the following query.
+        Format your answer with clear headings and bullet points where appropriate.
+        Keep your response focused, informative, and under 200 words.
+        
+        Query: ${prompt}
+      `;
+      
       const response = await axios.post(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
         {
@@ -39,16 +47,16 @@ export const useGeminiAI = () => {
             {
               parts: [
                 {
-                  text: prompt,
+                  text: enhancedPrompt,
                 },
               ],
             },
           ],
           generationConfig: {
-            temperature: 0.7,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 1024,
+            temperature: 0.4,
+            topK: 32,
+            topP: 0.8,
+            maxOutputTokens: 800,
           },
           safetySettings: [
             {
@@ -88,7 +96,15 @@ export const useGeminiAI = () => {
       }
       
       if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
-        const result = data.candidates[0].content.parts[0].text;
+        // Process the response to improve formatting
+        let result = data.candidates[0].content.parts[0].text;
+        
+        // Remove any extra instructions that might have been included
+        result = result.replace(/^(As an AI assistant|I'll provide|Here's a concise|Here is a|Following your instructions).*?\n/i, '');
+        
+        // Format markdown headers properly
+        result = result.replace(/^(\w.+):$/gm, '**$1:**');
+        
         setResponse(result);
       } else {
         toast({
